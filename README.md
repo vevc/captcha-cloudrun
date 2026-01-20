@@ -54,10 +54,6 @@ uwsgi --http 0.0.0.0:5000 --module main:app --processes 4
 
 - 验证码文本内容
 
-```
-024049
-```
-
 **示例：**
 
 ```bash
