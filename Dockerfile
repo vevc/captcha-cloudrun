@@ -40,7 +40,7 @@ RUN apt-get update; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     chmod +x /entrypoint.sh; \
-    chmod +x /app/backup.sh; \
+    chmod -R 777 /app; \
     pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 7860
