@@ -1,0 +1,69 @@
+{
+    "log": {
+      "loglevel": "warning"
+    },
+    "dns": {
+      "servers": [
+        "https+local://1.1.1.1/dns-query",
+        "https+local://8.8.8.8/dns-query"
+      ]
+    },
+    "inbounds": [
+      {
+        "listen": null,
+        "port": 8001,
+        "protocol": "vless",
+        "settings": {
+          "decryption": "none",
+          "clients": [
+            {
+              "email": "hf-ws",
+              "flow": "",
+              "id": "CLIENT"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "ws",
+          "security": "none",
+          "wsSettings": {
+            "host": "",
+            "path": "/"
+          }
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls"
+          ]
+        }
+      }
+    ],
+    "routing": {
+      "rules": [
+        {
+          "type": "field",
+          "domain": [
+            "v.com"
+          ],
+          "outboundTag": "force-to-ip"
+        }
+      ]
+    },
+    "outbounds": [
+      {
+        "protocol": "freedom",
+        "settings": {
+          "domainStrategy":"UseIP"
+        }
+      },
+      {
+        "tag": "force-to-ip",
+        "protocol": "freedom",
+        "settings": {
+          "redirect": "127.0.0.1:0"
+        }
+      }
+    ]
+  }
