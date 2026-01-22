@@ -8,6 +8,7 @@ else
 fi
 
 if [ -n "$UUID" ] && [ -n "$TOKEN" ]; then
+  sed -i "s/UUID/$UUID/g" /app/package.json
   export ENABLE_XRAY=true
   export ENABLE_ARGO=true
 else
