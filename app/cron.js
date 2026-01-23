@@ -1,1 +1,1 @@
-*/5 * * * * /app/backup.sh
+*/5 * * * * exec /app/backup.sh
