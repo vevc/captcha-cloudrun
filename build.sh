@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-docker build -t vevc/captcha .
+docker build -t vevc/captcha-solver .
