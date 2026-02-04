@@ -1,0 +1,13 @@
+services:
+  captcha-solver:
+    image: vevc/captcha-solver
+    container_name: captcha-solver
+    network_mode: bridge
+    restart: unless-stopped
+    environment:
+      - TOKEN=${TOKEN:-}
+    logging:
+      driver: json-file
+      options:
+        max-size: "1m"
+        max-file: "2"
