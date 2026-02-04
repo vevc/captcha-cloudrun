@@ -2,48 +2,34 @@ FROM alpine AS builder
 
 WORKDIR /app
 
-RUN wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip; \
-    unzip Xray-linux-64.zip; \
-    rm -f Xray-linux-64.zip; \
-    mv xray node22; \
-    wget -O node20 https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64; \
-    chmod +x node20; \
-    wget -O node18 https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64; \
-    chmod +x node18; \
-    wget -O node16 https://github.com/aptible/supercronic/releases/latest/download/supercronic-linux-amd64; \
-    chmod +x node16
+RUN wget -O cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64; \
+    chmod +x cloudflared
 
 ################################################################################
 
-FROM python:3.12-bookworm
+FROM python:3.12-slim
 
-ENV UUID='' \
-    TOKEN='' \
-    DOMAIN=''
+ENV TOKEN=''
 
 WORKDIR /app
 
-COPY app /app
 COPY entrypoint.sh /entrypoint.sh
+COPY supervisord.conf .
 
 COPY main.py .
 COPY requirements.txt .
 COPY xserver_captcha.keras .
 
-COPY --from=builder /app/node22 /usr/local/bin/node22
-COPY --from=builder /app/node20 /usr/local/bin/node20
-COPY --from=builder /app/node18 /usr/local/bin/node18
-COPY --from=builder /app/node16 /usr/local/bin/node16
+COPY --from=builder /app/cloudflared /usr/local/bin/cloudflared
 
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends curl ca-certificates wget vim net-tools supervisor unzip iputils-ping telnet git iproute2; \
+    apt-get install -y --no-install-recommends supervisor; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     chmod +x /entrypoint.sh; \
-    chmod -R 777 /app; \
     pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 7860
+EXPOSE 8001
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["supervisord", "-c", "/app/supervisord.conf"]

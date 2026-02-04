@@ -1,10 +1,7 @@
 import tensorflow as tf
 from flask import Flask, request, render_template_string
-from flask_cors import CORS
 
 app = Flask(__name__)
-# 启用 CORS 支持
-CORS(app)
 
 model = None
 
