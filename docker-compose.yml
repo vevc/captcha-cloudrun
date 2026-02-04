@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     environment:
       - TOKEN=${TOKEN:-}
+      - GUNICORN_WORKERS=${GUNICORN_WORKERS:-2}
     logging:
       driver: json-file
       options:
